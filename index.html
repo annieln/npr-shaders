@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<style>
+  body {
+    padding: 100px;
+    width: 1000px;
+    margin: auto;
+    text-align: left;
+    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    color: #121212;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+</style>
+<title>CS 184 Non-Photorealistic Shaders</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro" rel="stylesheet">
+
+<script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+        }
+    };
+</script>
+<script id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+</head>
+
+
+<body>
+
+<h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2023</h1>
+<h1 align="middle">CS 184 Final Project: Non-Photorealistic Shaders</h1>
+<h2 align="middle">Rishi Arjun, Camila Picanco Mesquita, Vivian Liu, Annie Lin</h2>
+<h2 align="middle">Website URL: <a href="google.com">TODO</a></h2>
+
+<br><br>
+
+<div align="middle">
+    <table style="width:100%">
+        <tr align="middle">
+            <td>
+                <img src="TODO" align="middle" width="600px"/>
+            </td>
+
+        </tr>
+    </table>
+</div>
+
+<div>
+
+<h2 align="middle">Overview</h2>
+    <p>Our project focused on implementing and supporting shaders for non-photorealistic rendering since we are interested in simulation and materials shading. We implemented a total of 5 shaders: Gooch Shading, Cel/Toon Shading, Fresnel Shading, Voronoi Shading, and Palette Shading. We built our project based off the project 4 codebase and adapted it to accommodate .obj files. In addition to shaders, we also modified our GUI to support interactive features such as specular highlights, edge outlines, color changes, etc.</p>
+
+    <br>
+
+<h2 align="middle">Technical Approach</h2>
+
+    <h3>Gooch Shading</h3>
+
+    <p>Gooch Shading is a technique used in technical illustration that gives the appearance of a "cool to warm" shading effect. The warm colors typically indicate surfaces are facing toward a light source, while cool colors represent surfaces facing away. It allows shading to occur in mid-tones to preserve visual prominence of edge lines and highlights.</p>
+    <p><u>Implementation:</u> The Gooch shading model is represented by the equation $I = \left( \frac{1 + \hat{l} \cdot \hat{n}}{2} \right) k_{cool} - \left( 1 - \frac{1 + \hat{l} \cdot \hat{n}}{2} \right) k_{warm} $, where $I$ is the RBG value to be displayed at a point on a given mesh surface, $k_d$ is the RGB diffuse reflectance at the point, $\hat{l}$ is the unit vector in the direction of the light source, and $\hat{n}$ is the unit surface normal vector at the point. The $k_{cool}$ and $k_{warm}$ are two RBG colors blended together throughout the model by the cosine term $\hat{l} \cdot \hat{n}$.
+    We began with a traditional diffuse shading model, then expanded upon it using the parameters outlined in the Gooch shading model. We also included computations for specular highlights and edge outlines.</p>
+    <p><u>Challenges:</u> The Gooch implementation is typically implemented in two passes. On the first pass, objects in a scene are drawn with “cool to warm” shading as described above. On the second pass, the object’s edges are rendered in black, which is where we encountered the most trouble. In an attempt to achieve this, our initial approach involved using multiple render targets.
+    On the first pass, we would render the model to a first render target (active shader) and a second render target (camera-space normals). Then, on the second pass, we would use a filter such as Sobel operator or Canny edge detection over the normals from the first pass to produce an outline for the model. However, when implementing this technique,
+    we struggled with understanding the mechanics of nanogui’s framebuffer objects and how to combine different render targets into one output.
+    We instead decided to build an edge detector into our fragment shader code. Outlines are rendered black under the condition that the dot product between the normal vector at any point on the model space and the camera direction vector is within 0 and 1 and less than a predetermined edge thickness value.</p>
+
+    <br>
+
+    <h3>Cel/Toon Shading</h3>
+
+    <p>Cel Shading, or Toon Shading, gives 3D objects a 2D “cartoonish” and hand drawn appearance. Cel shading is often used in video games, and we can see this shading technique being used in titles such as The Legend of Zelda: Breath of the Wild or The Legend of Zelda: Wind Waker.</p>
+    <p><u>Implementation:</u> The typical Cel Shader depends on a few factors: the number of tones of shading, specular reflection/highlights, and rim lighting. Our implementation of the Cel Shader relied on dividing the surface of an object into 3 bands of light, which gave the impression of a 3 tone shading effect. We did this by calculating the intensity of light relative to the position and checking to see if this intensity is above three thresholds (thus the 3 tone shading), in which we would accordingly set the colors to be a lighter or darker shade. In addition to this, we also added specular lighting for highlights, which depended on the direction of the camera (view direction of the surface). The formula we used for our specularly reflected lights was $k_s (I/r^2) \ max(0, n \cdot h)^p$
+        where $k_s$ is our specular coefficient, $I$ is our light source intensity, $r$ is the specular reflectivity, $n$ is the normal of our surface, $h$ is our half vector (the vector between the viewing direction and the light source), and $p$ is the specular exponent.</p>
+    <p>We started our implementation of Cel Shading based on the Blinn-Phong model, but without the diffuse and ambient lighting components. We referred to these resources (<a href="https://roystan.net/articles/toon-shader/">1</a>, <a href="https://en.wikibooks.org/wiki/GLSL_Programming/Unity/Toon_Shading">2</a>) while creating our Cel Shader, but excluded casting shadows off of our model objects.</p>
+    <p><u>Challenges:</u> At first we had rim lighting which for our .json objects, but we later removed it as it didn’t render as expected and our .obj objects appeared overexposed.</p>
+    <br>
+
+    <h3>Fresnel Shading</h3>
+    <p>Fresnel Shading darkens or lightens the outline of an object. This contributes to the perceived depth of an object. For our shader, we decided to lighten the outline of our objects for a highlighted or glowing effect.</p>
+    <p><u>Implementation</u>: We implemented Fresnel Shading by first highlighting one side of our object then making our highlighting relative to our view direction. We did this by taking the dot product between the surface normal and the camera position.</p>
+    <p><u>Challenges</u>: At first the Fresnel Shader was illuminating the inside so that the inside was glowing or lighter but the outside was dark. We fixed this by inverting our Fresnel value.</p>
+    <br>
+
+    <h3>Voronoi Shading</h3>
+    <p>Voronoi shading generates patterns based on the points closest to a pixel.</p>
+    <br>
+
+    <h3>Palette Shading</h3>
+    <p>Palette Shading adds color variation to an object.</p>
+    <p>
+    <u>Implementation</u>: There are several ways to implement this, such as through linear interpolation or triangle waves, but we decided to do cosine based palette shading. We implement this using the cosine equation: $color(t) = a + b * cos(2*pi*(c*t+d))$,
+    where $t$ is the normalized palette index or domain, $c$ is the number of times cosine oscillates, $d$ is the phase, and $a$, $b$, $c$, and $d$ are RGB 3D vectors. The cosine based method is more efficient compared to other methods of palette shading such as by using linear interpolation or triangle waves and is reasonably simple to implement.
+    </p>
+    <p><u>Challenges</u>: We found a MIT-licensed shader on ShaderToy called Pallete and made a few modifications to test in our project. The main difference in our implementation is that we added color variation through the GUI. It is worth noting that this shader works better on smaller objects than on larger ones because it used x and y vertex positions to define color. If the object is too large, the little color variation will appear.</p>
+    <p><u>Results</u>: Palette Shading is interesting because it is dependent on the positions of x and y. Notice how as the cloth is falling down, it changes colors.</p>
+
+    <br>
+
+    <h3>OBJ Loader</h3>
+
+    <p>We wanted to see how our shaders would appear on objects that were not provided in Project 4. For this, we integrated an open source OBJ Loader (<a href="https://github.com/Bly7/OBJ-Loader">here</a>) into our project 4.</p>
+
+    <p><u>Challenges</u>: Some function names from OBJ Loader conflicted with CGL’s function names, so we used the keyword “inline” to avoid duplicate errors. One of the main issues during our implementation of the OBJ Loader was finding a good way to pass the OBJ file as a parameter. We first tried doing this with the existing parameter “-f”, but decided to add a second parameter “-m” for the OBJ file. Because Project 4 has cloth hardcoded, we decided to use both “-f” to define a very thin cloth (that cannot be seen) with “plane_without_plane.json” and “-m” to define the OBJ file.</p>
+    <p>Another problem we faced was getting OBJ files that would work in our project. OBJ files that were too large wouldn’t fit the buffer and would either not show or break the GUI. Our workaround was to use Blender to import DAE files from projects 2 and 3 and export them as OBJ files. We only use files smaller than 2MB, as any OBJ file greater than 2MB will not run.</p>
+
+    <h3>GUI Modifications</h3>
+    <p>With the addition of different shaders and mesh objects, we updated our GUI to reflect such changes. The features our GUI uses are:</p>
+    <ul>
+        <li>Color Picker: Adds color to the shader, if applicable.</li>
+        <li>Light position: Changes the <code>x, y, z</code> coordinates of our light to demonstrate how our shader reacts to light from different locations.</li>
+        <li>Highlights: Enables and disables the specular highlights of our shaders.</li>
+        <li>Edges: Enables and disables edge detection.</li>
+        <li>Edge thickness: Changes the edge thickness if edge detection is enabled.</li>
+        <li>Voronoi isoline: For the custom Voronoi shader, increases/decreases the contour lines surrounding Voronoi cell centers.</li>
+        <li>Voronoi multicolor: For the regular and custom Voronoi shaders, toggles whether the shader should be multicolor or grayscale.</li>
+    </ul>
+
+    <br>
+
+<h2 align="middle">Lessons Learned</h2>
+
+    <p></p>
+
+    <br>
+
+<h2 align="middle">Results</h2>
+
+    <br>
+
+<h2 align="middle">Contributions</h2>
+    <ul>
+        <li>Camila - GUI, Palette Shader, OBJ loader, created .obj files, images/GIFs</li>
+        <li>Annie - GUI, Gooch Shader, Mesh edges/outline</li>
+        <li>Vivian - Cel Shader, Voronoi Shader, Fresnel Shader, Custom Voronoi Shader (with isolines)</li>
+        <li>Rishi - Presentation slides</li>
+    </ul>
+    <br>
+
+<h2 align="middle">Bug Art!</h2>
+
+    <br>
+
+<h2 align="middle">Resources</h2>
+
+    <br>
+
+
+</div>
+
+</body>
+</html>

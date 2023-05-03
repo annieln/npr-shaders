@@ -134,6 +134,18 @@
                 </td>
             </tr>
         </table>
+        <table style="width:100%">
+            <tr align="middle">
+                <td>
+                    <img src="images/toon_highlights.gif" align="middle" width="525px"/>
+                    <figcaption>Specular highlights following the camera view.</figcaption>
+                </td>
+                <td>
+                    <img src="images/toon_lighting.gif" align="middle" width="525px"/>
+                    <figcaption>Light position adjusting the 3-tone shading.</figcaption>
+                </td>
+            </tr>
+        </table>
     </div>
 
     <h3>Fresnel Shading</h3>
@@ -145,6 +157,21 @@
 
     <p><u>Results</u>:</p>
 
+    <div align="middle">
+        <table style="width:100%">
+            <tr align="middle">
+                <td>
+                    <img src="images/fresnel_cow.png" align="middle" width="490px"/>
+                    <figcaption>Fresnel shaded cow model.</figcaption>
+                </td>
+                <td>
+                    <img src="images/fresnel_moving.gif" align="middle" width="500px"/>
+                    <figcaption>Fresnel shader intensity varies with camera position.</figcaption>
+                </td>
+            </tr>
+        </table>
+    </div>
+
     <h3>Voronoi Shading</h3>
     <p>Voronoi shading generates patterns that resembles cells you can find in nature based on the points closest to a pixel.</p>
     <p><u>Implementation:</u> To create our Voronoi Shader, we first started by generating cellular noise (procedural texturing technique) to create our pattern. We started by retrieving the position of a pixel and scaling it by a factor that determines how big our cells are. We then we tiled our space using floor() and fract() to create a distance field. We then iterate through the grid we created to check the neighbors of a selected point. Some of the implementations of the Voronoi Shader utilized the real-time motion of a mouse and tracked time on the local device for interactivity with the shader. Instead of this, we decided to vary the pattern of the shader based on the camera position. We generated a random point based on the sum of the current tile coordinate and a neighbor coordinate and generate a random coordinate based on this value using a hash function we created. Surprisingly we didn’t have to do much to extend our implementation to use the Voronoi Algorithm. We just had to keep track of the point that is closest to a pixel, and adjust our color accordingly. We also created a custom Voronoi Shader after experimenting with this algorithm, where we drew in isolines (and added a feature to toggle them on or off) and added a multicolor effect (which was also togglable).
@@ -153,9 +180,51 @@
 
     <p><u>Results (Voronoi)</u>:</p>
 
+    <div align="middle">
+        <table style="width:100%">
+            <tr align="middle">
+                <td>
+                    <img src="images/voronoi.png" align="middle" width="500px"/>
+                    <figcaption>Voronoi shaded plane.</figcaption>
+                </td>
+                <td>
+                    <img src="images/voronoi_moving.gif" align="middle" width="500px"/>
+                    <figcaption>Moving voronoi cells.</figcaption>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <p>Note that when we run the simulation and move the Voronoi shaded plane around (especially on zoom-in), we don't actually observe the concentric circles around the Voronoi cells. (But our custom shader is implemented to have these circles!) These concentric circles appear to be an aliasing artifact from our GIFs.</p>
+
     <br>
 
     <p><u>Results (Custom)</u>:</p>
+
+    <div align="middle">
+        <table style="width:100%">
+            <tr align="middle">
+                <td>
+                    <img src="images/custom_moving.gif" align="middle" width="500px"/>
+                    <figcaption>Moving custom Voronoi shaded plane.</figcaption>
+                </td>
+                <td>
+                    <img src="images/custom_isoline.gif" align="middle" width="500px"/>
+                    <figcaption>Adusting isolines in custom Voronoi shaded plane.</figcaption>
+                </td>
+            </tr>
+            <tr align="middle">
+                <td>
+                    <img src="images/custom_multicolor_moving.gif" align="middle" width="500px"/>
+                    <figcaption>Moving multicolored custom Voronoi shaded plane.</figcaption>
+                </td>
+                <td>
+                    <img src="images/custom_multicolor_isoline.gif" align="middle" width="500px"/>
+                    <figcaption>Adusting isolines in multicolored custom Voronoi shaded plane.</figcaption>
+                </td>
+            </tr>
+        </table>
+    </div>
 
     <h3>Palette Shading</h3>
     <p>Palette Shading adds color variation to an object.</p>
@@ -198,8 +267,16 @@
     <p><u>Challenges</u>: Some function names from OBJ Loader conflicted with CGL’s function names, so we used the keyword “inline” to avoid duplicate errors. One of the main issues during our implementation of the OBJ Loader was finding a good way to pass the OBJ file as a parameter. We first tried doing this with the existing parameter “-f”, but decided to add a second parameter “-m” for the OBJ file. Because Project 4 has cloth hardcoded, we decided to use both “-f” to define a very thin cloth (that cannot be seen) with “plane_without_plane.json” and “-m” to define the OBJ file.</p>
     <p>Another problem we faced was getting OBJ files that would work in our project. OBJ files that were too large wouldn’t fit the buffer and would either not show or break the GUI. Our workaround was to use Blender to import DAE files from projects 2 and 3 and export them as OBJ files. We only use files smaller than 2MB, as any OBJ file greater than 2MB will not run.</p>
 
+    <br>
+
+    <div>
+
+    <img src="images/gui.png" align="right" hspace="50" width="150px">
+
     <h3>GUI Modifications</h3>
+
     <p>With the addition of different shaders and mesh objects, we updated our GUI to reflect such changes. The features our GUI uses are:</p>
+
     <ul>
         <li>Color Picker: Adds color to the shader, if applicable.</li>
         <li>Light position: Changes the <code>x, y, z</code> coordinates of our light to demonstrate how our shader reacts to light from different locations.</li>
@@ -211,6 +288,10 @@
     </ul>
 
     <br>
+    <br>
+
+    </div>
+
 
 <h2 align="middle">Lessons Learned</h2>
 
@@ -219,9 +300,9 @@
 
     <br>
 
-<h2 align="middle">Results</h2>
+<!--<h2 align="middle">Results</h2>-->
 
-    <br>
+<!--    <br>-->
 
 <h2 align="middle">Contributions</h2>
     <ul>
@@ -232,11 +313,11 @@
     </ul>
     <br>
 
-<h2 align="middle">Presentation Video</h2>
+<!--<h2 align="middle">Presentation Video</h2>-->
 
-<h2 align="middle">Bug Art!</h2>
+<!--<h2 align="middle">Bug Art!</h2>-->
 
-    <br>
+<!--    <br>-->
 
 <h2 align="middle">Resources</h2>
 

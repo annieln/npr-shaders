@@ -91,7 +91,7 @@
 
     <h3>Voronoi Shading</h3>
     <p>Voronoi shading generates patterns that resembles cells you can find in nature based on the points closest to a pixel.</p>
-    <p><u>Implementation:</u> </p>
+    <p><u>Implementation:</u> To create our Voronoi Shader, we first started by generating cellular noise (procedural texturing technique) to create our pattern. We started by retrieving the position of a pixel and scaling it by a factor that determines how big our cells are. We then we tiled our space using floor() and fract() to create a distance field. We then iterate through the grid we created to check the neighbors of a selected point. Some of the implementations of the Voronoi Shader utilized the real-time motion of a mouse and tracked time on the local device for interactivity with the shader. Instead of this, we decided to vary the pattern of the shader based on the camera position. We generated a random point based on the sum of the current tile coordinate and a neighbor coordinate and generate a random coordinate based on this value using a hash function we created. Surprisingly we didn’t have to do much to extend our implementation to use the Voronoi Algorithm. We just had to keep track of the point that is closest to a pixel, and adjust our color accordingly. We also created a custom Voronoi Shader after experimenting with this algorithm, where we drew in isolines (and added a feature to toggle them on or off) and added a multicolor effect (which was also togglable).</p>
     <p><u>Challenges:</u> Our Voronoi Shader doesn’t work properly with the new meshes we imported as .obj files despite our best efforts. We realized this was due to the use of for loops in the implementation and the fact that the .obj files only worked with very specific sizes.</p>
 
 
@@ -146,6 +146,8 @@
         <li>Rishi - Presentation slides</li>
     </ul>
     <br>
+
+<h2 align="middle">Presentation Video</h2>
 
 <h2 align="middle">Bug Art!</h2>
 

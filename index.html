@@ -189,13 +189,13 @@
                 </td>
                 <td>
                     <img src="images/voronoi_moving.gif" align="middle" width="500px"/>
-                    <figcaption>Moving voronoi cells.</figcaption>
+                    <figcaption>Moving voronoi cells.*</figcaption>
                 </td>
             </tr>
         </table>
     </div>
 
-    <p>Note that when we run the simulation and move the Voronoi shaded plane around (especially on zoom-in), we don't actually observe the concentric circles around the Voronoi cells. (But our custom shader is implemented to have these circles!) These concentric circles appear to be an aliasing artifact from our GIFs.</p>
+    <p>* Note that when we run the simulation and move the Voronoi shaded plane around (especially on zoom-in), we don't actually observe the concentric circles around the Voronoi cells. (But our custom shader is implemented to have these circles!) These concentric circles appear to be an aliasing artifact from our GIFs. See our presentation video (at the bottom of the page) for better quality.</p>
 
     <br>
 
@@ -210,7 +210,7 @@
                 </td>
                 <td>
                     <img src="images/custom_isoline.gif" align="middle" width="500px"/>
-                    <figcaption>Adusting isolines in custom Voronoi shaded plane.</figcaption>
+                    <figcaption>Adjusting isolines in custom Voronoi shaded plane.</figcaption>
                 </td>
             </tr>
             <tr align="middle">
@@ -220,7 +220,53 @@
                 </td>
                 <td>
                     <img src="images/custom_multicolor_isoline.gif" align="middle" width="500px"/>
-                    <figcaption>Adusting isolines in multicolored custom Voronoi shaded plane.</figcaption>
+                    <figcaption>Adjusting isolines in multicolored custom Voronoi shaded plane.</figcaption>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+    <p>As mentioned above, the Voronoi and custom shaders don't render on our mesh .obj models as we would like. Below is what they look like applied to our bunny model. As we can see, there are missing triangles in the rendered mesh. While Voronoi cells behave with respect to camera position, they appear as bands around the mesh and the movement between cells appears more like color switching.</p>
+
+    <p><u>Results (Voronoi)</u>:</p>
+
+    <div align="middle">
+        <table style="width:100%">
+            <tr align="middle">
+                <td>
+                    <img src="images/voronoi_bunny.gif" align="middle" width="500px"/>
+                    <figcaption>Voronoi cells moving on shaded bunny.</figcaption>
+                </td>
+                <td>
+                    <img src="images/voronoi_bunny_colors.gif" align="middle" width="500px"/>
+                    <figcaption>Voronoi shaded bunny with customizable colored cells.</figcaption>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <p><u>Results (Custom)</u>:</p>
+    <div align="middle">
+        <table style="width:100%">
+            <tr align="middle">
+                <td>
+                    <img src="images/custom_bunny_isoline.gif" align="middle" width="500px"/>
+                    <figcaption>Adjusting isoline parameter on custom shaded bunny.</figcaption>
+                </td>
+                <td>
+                    <img src="images/cutom_bunny_multicolor.gif" align="middle" width="500px"/>
+                    <figcaption>Toggling multicolor parameter on custom shaded bunny.</figcaption>
+                </td>
+            </tr>
+            <tr align="middle">
+                <td>
+                    <img src="images/custom_bunny_not_multicolor.gif" align="middle" width="500px"/>
+                    <figcaption>Custom shaded bunny with colored cells.</figcaption>
+                </td>
+                <td>
+                    <img src="images/custom_bunny_multicolor.gif" align="middle" width="500px"/>
+                    <figcaption>Custom shaded bunny with multicolored and colored cells.</figcaption>
                 </td>
             </tr>
         </table>
@@ -244,15 +290,17 @@
                 </td>
                 <td>
                     <img src="images/palette_cloth.png" align="middle" width="490px"/>
-                    <figcaption>Here is the Palette Shaded cloth at the fallen rest state. Palette shading produces color variation as seen in the blended colors that are better reflected than the GIF image quality on the left.</figcaption>
+                    <figcaption>Here is the Palette Shaded cloth at the fallen rest state. Palette shading produces color variation as seen in the blended colors. (Note that unblended GIF on the left is due to aliasing.)</figcaption>
                 </td>
             </tr>
             <tr align="middle">
                 <td>
                     <img src="images/beepbeep.png" align="middle" width="500px"/>
+                    <figcaption>Palette shaded beattle.</figcaption>
                 </td>
                 <td>
                     <img src="images/palette_teapot.png" align="middle" width="500px"/>
+                    <figcaption>Palette shaded teapot.</figcaption>
                 </td>
             </tr>
         </table>

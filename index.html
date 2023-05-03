@@ -74,11 +74,11 @@
     <p><u>Results</u>:</p>
 
     <div align="middle">
-        <table style="width:100%">
+        <table style="width:60%">
             <tr align="middle">
                 <td>
                     <img src="images/warm_to_cool.png" align="middle" width="500px"/>
-                    <figcaption>"Cool to warm shading": The warm color indicates that the surface is facing towards the light, whereas the cool color indicates the surface is facing away.</figcaption>
+                    <figcaption>Looking at the model from this angle, it makes sense that the bottom surfaces show cooler tones (facing away from the light) and the top surfaces show warmer tones and specular highlights (facing toward the light).</figcaption>
                 </td>
 
             </tr>
@@ -115,6 +115,26 @@
     <p>We started our implementation of Cel Shading based on the Blinn-Phong model, but without the diffuse and ambient lighting components. We referred to these resources (<a href="https://roystan.net/articles/toon-shader/">1</a>, <a href="https://en.wikibooks.org/wiki/GLSL_Programming/Unity/Toon_Shading">2</a>) while creating our Cel Shader, but excluded casting shadows off of our model objects.</p>
     <p><u>Challenges:</u> At first we had rim lighting which for our .json objects, but we later removed it as it didn’t render as expected and our .obj objects appeared overexposed.</p>
 
+    <p><u>Results</u>:</p>
+
+    <div align="middle">
+        <table style="width:100%">
+            <tr align="middle">
+                <td>
+                    <img src="images/cel_bunny_no_highlight.png" align="middle" width="350px"/>
+                    <figcaption>Cel shaded bunny without specular highlights.</figcaption>
+                </td>
+                <td>
+                    <img src="images/cel_bunny_default.png" align="middle" width="350px"/>
+                    <figcaption>Cel shaded bunny with highlights and edges.</figcaption>
+                </td>
+                <td>
+                    <img src="images/cel_bunny_no_edge.png" align="middle" width="350px"/>
+                    <figcaption>Cel shaded bunny without edge detection.</figcaption>
+                </td>
+            </tr>
+        </table>
+    </div>
 
     <h3>Fresnel Shading</h3>
     <p>Fresnel Shading darkens or lightens the outline of an object. This contributes to the perceived depth of an object. For our shader, we decided to lighten the outline of our objects for a highlighted or glowing effect.</p>
@@ -123,6 +143,7 @@
     We referred to these resources (<a href="https://www.ronja-tutorials.com/post/012-fresnel/">1</a>, <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel.html">2</a>) to better understand how Fresnel Shading works.</p>
     <p><u>Challenges</u>: At first the Fresnel Shader was illuminating the inside so that the inside was glowing or lighter but the outside was dark. We fixed this by inverting our Fresnel value. Some Fresnel Shading implementations did not use clamping, but we wanted to prevent overly bright or dark (negative emissions) results with our objects.</p>
 
+    <p><u>Results</u>:</p>
 
     <h3>Voronoi Shading</h3>
     <p>Voronoi shading generates patterns that resembles cells you can find in nature based on the points closest to a pixel.</p>
@@ -130,6 +151,11 @@
     We used (<a href="https://thebookofshaders.com/12/">this</a>) as a reference for implementing our Voronoi Shader. </p>
     <p><u>Challenges:</u> Our Voronoi Shader doesn’t work properly with the new meshes we imported as .obj files despite our best efforts. We realized this was due to the use of for loops in the implementation and the fact that the .obj files only worked with very specific sizes.</p>
 
+    <p><u>Results (Voronoi)</u>:</p>
+
+    <br>
+
+    <p><u>Results (Custom)</u>:</p>
 
     <h3>Palette Shading</h3>
     <p>Palette Shading adds color variation to an object.</p>

@@ -71,6 +71,41 @@
     we struggled with understanding the mechanics of nanogui’s framebuffer objects and how to combine different render targets into one output.
     We instead decided to build an edge detector into our fragment shader code. Outlines are rendered black under the condition that the dot product between the normal vector at any point on the model space and the camera direction vector is within 0 and 1 and less than a predetermined edge thickness value.</p>
 
+    <p><u>Results</u>:</p>
+
+    <div align="middle">
+        <table style="width:100%">
+            <tr align="middle">
+                <td>
+                    <img src="images/warm_to_cool.png" align="middle" width="500px"/>
+                    <figcaption>"Cool to warm shading": The warm color indicates that the surface is facing towards the light, whereas the cool color indicates the surface is facing away.</figcaption>
+                </td>
+
+            </tr>
+        </table>
+        <table style="width:100%">
+            <tr align="middle">
+                <td>
+                    <img src="images/edge_on.png" align="middle" width="500px"/>
+                    <figcaption>Gooch shaded bunny with edge detection on</figcaption>
+                </td>
+                <td>
+                    <img src="images/edge_off.png" align="middle" width="500px"/>
+                    <figcaption>Gooch shaded bunny with edge detection off</figcaption>
+                </td>
+            </tr>
+            <tr align="middle">
+                <td>
+                    <img src="images/gooch_cow.png" align="middle" width="500px"/>
+                    <figcaption>Gooch shaded cow. Edges are defined, and colored shading effectively communicates the surface orientation.</figcaption>
+                </td>
+                <td>
+                    <img src="images/phong_cow.png" align="middle" width="500px"/>
+                    <figcaption>Phong shaded cow. Even though edge detection is on, the edges are hidden by the black shaded regions. (Hard to distinguish legs!)</figcaption>
+                </td>
+            </tr>
+        </table>
+    </div>
 
     <h3>Cel/Toon Shading</h3>
 

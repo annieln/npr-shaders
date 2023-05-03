@@ -36,9 +36,8 @@
 <body>
 
 <h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2023</h1>
-<h1 align="middle">CS 184 Final Project: Non-Photorealistic Shaders</h1>
+<h1 align="middle">Non-Photorealistic Shaders</h1>
 <h2 align="middle">Rishi Arjun, Camila Picanco Mesquita, Vivian Liu, Annie Lin</h2>
-<h2 align="middle">Website URL: <a href="google.com">TODO</a></h2>
 
 <br><br>
 
@@ -72,7 +71,6 @@
     we struggled with understanding the mechanics of nanogui’s framebuffer objects and how to combine different render targets into one output.
     We instead decided to build an edge detector into our fragment shader code. Outlines are rendered black under the condition that the dot product between the normal vector at any point on the model space and the camera direction vector is within 0 and 1 and less than a predetermined edge thickness value.</p>
 
-    <br>
 
     <h3>Cel/Toon Shading</h3>
 
@@ -81,17 +79,21 @@
         where $k_s$ is our specular coefficient, $I$ is our light source intensity, $r$ is the specular reflectivity, $n$ is the normal of our surface, $h$ is our half vector (the vector between the viewing direction and the light source), and $p$ is the specular exponent.</p>
     <p>We started our implementation of Cel Shading based on the Blinn-Phong model, but without the diffuse and ambient lighting components. We referred to these resources (<a href="https://roystan.net/articles/toon-shader/">1</a>, <a href="https://en.wikibooks.org/wiki/GLSL_Programming/Unity/Toon_Shading">2</a>) while creating our Cel Shader, but excluded casting shadows off of our model objects.</p>
     <p><u>Challenges:</u> At first we had rim lighting which for our .json objects, but we later removed it as it didn’t render as expected and our .obj objects appeared overexposed.</p>
-    <br>
+
 
     <h3>Fresnel Shading</h3>
     <p>Fresnel Shading darkens or lightens the outline of an object. This contributes to the perceived depth of an object. For our shader, we decided to lighten the outline of our objects for a highlighted or glowing effect.</p>
-    <p><u>Implementation</u>: We implemented Fresnel Shading by first highlighting one side of our object then making our highlighting relative to our view direction. We did this by taking the dot product between the surface normal and the camera position.</p>
-    <p><u>Challenges</u>: At first the Fresnel Shader was illuminating the inside so that the inside was glowing or lighter but the outside was dark. We fixed this by inverting our Fresnel value.</p>
-    <br>
+    <p><u>Implementation</u>: We implemented Fresnel Shading by first highlighting one side of our object then making our highlighting relative to our view direction. We did this by taking the dot product between the surface normal and the camera position.
+    We then subtracted the resulting value from 1.0 and clamp it between 0 and 4 to prevent unwanted lighting effects. We then raised this resulting fresnel value by an exponent. Based on this exponent value, our fresnel effect would either be stronger or weaker (for bigger exponents, our fresnel effect would be seen closer to the edges). We then multiplied our fresnel value by a color adjustment, which would be the “glow” color of the object, and by the intensity, which changes how intense the “glowing” effect of the Fresnel Shader is.
+    We referred to these resources (<a href="https://www.ronja-tutorials.com/post/012-fresnel/">1</a>, <a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel.html">2</a>) to better understand how Fresnel Shading works.</p>
+    <p><u>Challenges</u>: At first the Fresnel Shader was illuminating the inside so that the inside was glowing or lighter but the outside was dark. We fixed this by inverting our Fresnel value. Some Fresnel Shading implementations did not use clamping, but we wanted to prevent overly bright or dark (negative emissions) results with our objects.</p>
+
 
     <h3>Voronoi Shading</h3>
-    <p>Voronoi shading generates patterns based on the points closest to a pixel.</p>
-    <br>
+    <p>Voronoi shading generates patterns that resembles cells you can find in nature based on the points closest to a pixel.</p>
+    <p><u>Implementation:</u> </p>
+    <p><u>Challenges:</u> Our Voronoi Shader doesn’t work properly with the new meshes we imported as .obj files despite our best efforts. We realized this was due to the use of for loops in the implementation and the fact that the .obj files only worked with very specific sizes.</p>
+
 
     <h3>Palette Shading</h3>
     <p>Palette Shading adds color variation to an object.</p>
@@ -100,9 +102,9 @@
     where $t$ is the normalized palette index or domain, $c$ is the number of times cosine oscillates, $d$ is the phase, and $a$, $b$, $c$, and $d$ are RGB 3D vectors. The cosine based method is more efficient compared to other methods of palette shading such as by using linear interpolation or triangle waves and is reasonably simple to implement.
     </p>
     <p><u>Challenges</u>: We found a MIT-licensed shader on ShaderToy called Pallete and made a few modifications to test in our project. The main difference in our implementation is that we added color variation through the GUI. It is worth noting that this shader works better on smaller objects than on larger ones because it used x and y vertex positions to define color. If the object is too large, the little color variation will appear.</p>
-    <p><u>Results</u>: Palette Shading is interesting because it is dependent on the positions of x and y. Notice how as the cloth is falling down, it changes colors.</p>
+<!--    <p><u>Results</u>: Palette Shading is interesting because it is dependent on the positions of x and y. Notice how as the cloth is falling down, it changes colors.</p>-->
 
-    <br>
+
 
     <h3>OBJ Loader</h3>
 
@@ -127,7 +129,8 @@
 
 <h2 align="middle">Lessons Learned</h2>
 
-    <p></p>
+    <p>We learned that starting our project early is important. We learned early on that our original melting simulation idea was too ambitious given that we were struggling to get our fluid simulation to resemble actual fluids and still had to implement phase changes and heat transfer. Luckily, we were able to pivot to implementing non-photorealistic shaders, which still aligned with our original interest of simulation and materials shading.</p>
+    <p>Despite the fact we only learned photorealistic techniques in class, photorealistic shading is not the only type of shading that is commonly used. In fact, there is a move towards non-photorealistic styles now as animated films are becoming increasingly stylized.</p>
 
     <br>
 
@@ -150,7 +153,22 @@
 
 <h2 align="middle">Resources</h2>
 
-    <br>
+    <ul>
+        <li><a href="https://www.cs.princeton.edu/courses/archive/fall00/cs597b/papers/gooch98.pdf">A Non-Photorealistic Lighting Model For Automatic Technical Illustration</a></li>
+        <li><a href="https://www.cl.cam.ac.uk/teaching/1617/AdvGraph/2.%20OpenGL%20and%20Shaders%20II.pdf">Advanced Graphics OpenGL and Shaders II</a></li>
+        <li><a href="https://thebookofshaders.com/12/">Book of Shaders</a></li>
+        <li><a href="https://www.shadertoy.com/view/ll2GD3">ShaderToy: Palettes</a></li>
+        <li><a href="https://en.wikibooks.org/wiki/GLSL_Programming/Unity/Toon_Shading">GLSL Programming/Unity/Toon Shading</a></li>
+        <li><a href="https://roystan.net/articles/toon-shader/">Toon Shader</a></li>
+        <li><a href="http://kylehalladay.com/blog/tutorial/2014/02/18/Fresnel-Shaders-From-The-Ground-Up.html">The Basics of Fresnel Shading</a></li>
+        <li><a href="https://github.com/Bly7/OBJ-Loader/blob/master/Source/OBJ_Loader.h">OBJ Loader Source Code</a></li>
+        <li><a href="https://www.geeksforgeeks.org/inline-functions-cpp/#">Inline Functions in C++</a></li>
+        <li><a href="https://www.geeksforgeeks.org/inline-functions-cpp/#">Voronoi Noise</a></li>
+        <li><a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel.html">Introduction to Shading</a></li>
+        <li><a href="https://danielilett.com/2019-06-08-tut2-2-cel-shading/">Cel Shading</a></li>
+        <li><a href="https://godotshaders.com/snippet/fresnel/">Fresnel - Godot Shaders</a></li>
+        <li><a href="https://www.ronja-tutorials.com/post/012-fresnel/">Fresnel | Ronja's Tutorials</a></li>
+    </ul>
 
 
 </div>

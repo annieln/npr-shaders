@@ -77,10 +77,13 @@
         <table style="width:60%">
             <tr align="middle">
                 <td>
-                    <img src="images/warm_to_cool.png" align="middle" width="500px"/>
-                    <figcaption>Looking at the model from this angle, it makes sense that the bottom surfaces show cooler tones (facing away from the light) and the top surfaces show warmer tones and specular highlights (facing toward the light).</figcaption>
+                    <img src="images/gooch_ball.png" align="middle" width="500px"/>
+                    <figcaption>Gooch shaded ball.<br><br><br><br></figcaption>
                 </td>
-
+                <td>
+                    <img src="images/warm_to_cool.png" align="middle" width="500px"/>
+                    <figcaption>Looking at the model from this angle, it makes sense that the bottom surfaces show cooler tones (facing away from light) and the top surfaces show warmer tones (facing toward light) and specular highlights.</figcaption>
+                </td>
             </tr>
         </table>
         <table style="width:100%">
@@ -105,6 +108,15 @@
                 </td>
             </tr>
         </table>
+        <table style="width:60%">
+            <tr align="middle">
+                <td>
+                    <img src="images/warm_to_cool.png" align="middle" width="500px"/>
+                    <figcaption>Looking at the model from this angle, it makes sense that the bottom surfaces show cooler tones (facing away from the light) and the top surfaces show warmer tones and specular highlights (facing toward the light).</figcaption>
+                </td>
+
+            </tr>
+        </table>
     </div>
 
     <h3>Cel/Toon Shading</h3>
@@ -118,6 +130,12 @@
     <p><u>Results</u>:</p>
 
     <div align="middle">
+        <table styel="width:50%">
+            <tr align="middle">
+                <img src="images/cel_ball.png" width="500px">
+                <figcaption>Cel shaded ball.</figcaption>
+            </tr>
+        </table>
         <table style="width:100%">
             <tr align="middle">
                 <td>
@@ -158,14 +176,26 @@
     <p><u>Results</u>:</p>
 
     <div align="middle">
+        <table styel="width:50%">
+            <tr align="middle">
+                <td>
+                    <img src="images/fresnel_ball.png" width="500px">
+                    <figcaption>Fresnel shaded ball.</figcaption>
+                </td>
+                <td>
+                    <img src="images/fresnel_cow.png" width="500px"/>
+                    <figcaption>Fresnel shaded cow model.</figcaption>
+                </td>
+            </tr>
+        </table>
         <table style="width:100%">
             <tr align="middle">
                 <td>
-                    <img src="images/fresnel_cow.png" align="middle" width="490px"/>
-                    <figcaption>Fresnel shaded cow model.</figcaption>
+                    <img src="images/fresnel_color.gif" align="middle" width="500px"/>
+                    <figcaption>Fresnel shader with customizable color.</figcaption>
                 </td>
                 <td>
-                    <img src="images/fresnel_moving.gif" align="middle" width="500px"/>
+                    <img src="images/fresnel_moving.gif" align="middle" width="510px"/>
                     <figcaption>Fresnel shader intensity varies with camera position.</figcaption>
                 </td>
             </tr>
@@ -283,7 +313,7 @@
     <h3>Palette Shading</h3>
     <p>Palette Shading adds color variation to an object.</p>
     <p>
-    <u>Implementation</u>: There are several ways to implement this, such as through linear interpolation or triangle waves, but we decided to do cosine based palette shading. We implement this using the cosine equation: $color(t) = a + b * cos(2*pi*(c*t+d))$,
+    <u>Implementation</u>: There are several ways to implement this, such as through linear interpolation or triangle waves, but we decided to do cosine based palette shading. We implement this using the cosine equation: $color(t) = a + b * cos(2*\pi*(c*t+d))$,
     where $t$ is the normalized palette index or domain, $c$ is the number of times cosine oscillates, $d$ is the phase, and $a$, $b$, $c$, and $d$ are RGB 3D vectors. The cosine based method is more efficient compared to other methods of palette shading such as by using linear interpolation or triangle waves and is reasonably simple to implement.
     </p>
     <p><u>Challenges</u>: We found a MIT-licensed shader on ShaderToy called Pallete and made a few modifications to test in our project. The main difference in our implementation is that we added color variation through the GUI. It is worth noting that this shader works better on smaller objects than on larger ones because it used x and y vertex positions to define color. If the object is too large, the little color variation will appear.</p>
